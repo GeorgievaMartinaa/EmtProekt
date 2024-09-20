@@ -39,9 +39,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book bookOrdered(BookId bookId, int quantity) {
-       // System.out.println("Koja kniga se poracuva "+bookId+" i vo kolkava kolicina "+ quantity);
         Book book = bookRepository.findById(bookId).orElseThrow(BookNotFoundExeption::new);
-      //  System.out.println("Knigata koja se poracuva e:  " + book.getName() + "Ima bookCount "+ book.getBookCount());
         book.orderBook(quantity);
         bookRepository.saveAndFlush(book);
         return book;

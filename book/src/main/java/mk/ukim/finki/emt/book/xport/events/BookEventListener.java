@@ -20,15 +20,12 @@ public class BookEventListener {
 
     @KafkaListener(topics = TopicHolder.TOPIC_BOOK_ORDERED, groupId = "book")
     public void consumeBookOrderedEvent(String jsonMessage) {
-       // System.out.println("Received message Martina: " + jsonMessage);
 
         try {
             if (jsonMessage == null || jsonMessage.isEmpty()) {
                 throw new IllegalArgumentException("Received empty message");
             }
-            //System.out.println("Received message Martina: " + jsonMessage);
             BookOrdered event = DomainEvent.fromJson(jsonMessage, BookOrdered.class);
-           // System.out.println("Event Od deserijalizacija Martina:  "+event);
             bookService.bookOrdered(BookId.of(event.getBookid()), event.getQuantity());
 
         } catch (JsonProcessingException e) {
@@ -42,15 +39,12 @@ public class BookEventListener {
 
     @KafkaListener(topics = TopicHolder.TOPIC_BOOK_ADDED, groupId = "book")
     public void consumeBookAddedEvent(String jsonMessage) {
-        // System.out.println("Received message Martina: " + jsonMessage);
 
         try {
             if (jsonMessage == null || jsonMessage.isEmpty()) {
                 throw new IllegalArgumentException("Received empty message");
             }
-            //System.out.println("Received message Martina: " + jsonMessage);
             BookOrdered event = DomainEvent.fromJson(jsonMessage, BookOrdered.class);
-            // System.out.println("Event Od deserijalizacija Martina:  "+event);
             bookService.bookOrdered(BookId.of(event.getBookid()), event.getQuantity());
 
         } catch (JsonProcessingException e) {

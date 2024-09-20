@@ -1,7 +1,6 @@
 package mk.ukim.finki.emt.book.xport.rest;
 
 import lombok.AllArgsConstructor;
-import mk.ukim.finki.emt.book.domain.exeptions.BookNotFoundExeption;
 import mk.ukim.finki.emt.book.domain.model.Book;
 import mk.ukim.finki.emt.book.domain.model.BookId;
 import mk.ukim.finki.emt.book.domain.model.Category;
@@ -50,21 +49,18 @@ public class BookResource {
     @GetMapping("/categories")
     public ResponseEntity<Category[]> getCategories(){
         Category[] categories = Category.values();
-        System.out.println("Book Categories ->"+categories);
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/status")
     public ResponseEntity<Status[]> getStatus(){
         Status[] statuses = Status.values();
-        //System.out.println("Book Categories ->"+categories);
         return ResponseEntity.ok(statuses);
     }
 
     @GetMapping("/currency")
     public ResponseEntity<Currency[]> getCurrency(){
         Currency[] currencies = Currency.values();
-        //System.out.println("Book Categories ->"+categories);
         return ResponseEntity.ok(currencies);
     }
 

@@ -29,7 +29,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    //Bidejki apl servisi ja orkestirat celata apl mozam da dodadam repozitori.
+
     private final OrderRepository orderRepository;
     //private final Validator validator;
     private final DomainEventPublisher domainEventPublisher;
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         var newOrder = orderRepository.saveAndFlush(toDomainObject(orderForm));
         System.out.println("Producer newOrder" + newOrder);
 
-        //Ovde se povikuva producerot
+
         newOrder.getBookOrderSet().forEach(item->domainEventPublisher.publish(new BookOrdered(item.getBookId().getId(), item.getQuantity())));
 
         return newOrder.getId();
@@ -77,14 +77,6 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    /*@Override
-    public void deleteItem(OrderId orderId, BookOrderId bookOrderId, BookOrderForm bookOrderForm) throws OrderIdNotExistsExeption, BookOrderIdNotExistExeption {
-        Order order = findById(orderId).orElseThrow(OrderIdNotExistsExeption::new);
-        order.removeBookFromOrder(bookOrderId);
-
-        orderRepository.saveAndFlush(order);
-    }*/
-
     @Override
     public void deleteItem(OrderId orderId, BookOrderId bookOrderId) throws OrderIdNotExistsExeption, BookOrderIdNotExistExeption {
         Order order = findById(orderId).orElseThrow(OrderIdNotExistsExeption::new);
@@ -93,11 +85,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.saveAndFlush(order);
     }
 
-        //konvertira od orderform vo order
+
         private Order toDomainObject(OrderForm orderForm){
         var order = new Order(Instant.now(),orderForm.getCurrency());
 
-        //gi lista site podatoci od order formata i gi stava vo narachkata
         orderForm.getItems().forEach(item-> order.addBookInOrder(item.getBook(),item.getQuantity()));
 
         return order;

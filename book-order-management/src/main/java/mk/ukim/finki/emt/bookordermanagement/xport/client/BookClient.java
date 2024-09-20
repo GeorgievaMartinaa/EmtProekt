@@ -12,10 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Collections;
 import java.util.List;
 
-//pristapuva resursi od book katalogot- zima gi  knigite so se u data init za book
 @Service
 public class BookClient {
-    //pravi povici do nadvoresen resurs
+
     private  final RestTemplate restTemplate;
     private final String serverUrl;
 
