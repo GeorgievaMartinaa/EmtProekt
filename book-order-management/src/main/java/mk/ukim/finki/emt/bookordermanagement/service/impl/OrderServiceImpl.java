@@ -66,27 +66,8 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
-    @Override
-    public void addItem(OrderId orderId, BookOrderForm bookOrderForm) throws OrderIdNotExistsExeption {
-        Order order = findById(orderId).orElseThrow(OrderIdNotExistsExeption::new);
-        order.addBookInOrder(bookOrderForm.getBook(), bookOrderForm.getQuantity());
 
-        orderRepository.saveAndFlush(order);
-
-        domainEventPublisher.publish(new BookOrdered(bookOrderForm.getBook().getId().getId(), bookOrderForm.getQuantity()));
-
-    }
-
-    @Override
-    public void deleteItem(OrderId orderId, BookOrderId bookOrderId) throws OrderIdNotExistsExeption, BookOrderIdNotExistExeption {
-        Order order = findById(orderId).orElseThrow(OrderIdNotExistsExeption::new);
-        order.removeBookFromOrder(bookOrderId);
-
-        orderRepository.saveAndFlush(order);
-    }
-
-
-        private Order toDomainObject(OrderForm orderForm){
+    private Order toDomainObject(OrderForm orderForm){
         var order = new Order(Instant.now(),orderForm.getCurrency());
 
         orderForm.getItems().forEach(item-> order.addBookInOrder(item.getBook(),item.getQuantity()));

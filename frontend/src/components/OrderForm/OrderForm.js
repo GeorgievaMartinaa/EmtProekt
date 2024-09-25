@@ -12,16 +12,46 @@ const OrderForm = (props) => {
                 {props.orderForm.items.map
                 ((item) => {
                     {console.log(item)}
-                    if(item.priceWithDiscount.currency === "MKD")
-                        sum+=item.priceWithDiscount.amount
-                    else sum+= item.priceWithDiscount.amount*61.5;
+                    if(item.book.priceWithDiscount.currency === "MKD")
+                        sum+=item.book.priceWithDiscount.amount * item.quantity
+                    else sum+= (item.book.priceWithDiscount.amount*61.5) *item.quantity;
+                    if(item.book.priceWithDiscount.currency === "MKD"){
                     return (
                         <li>
-                            {item.name}, {item.priceWithDiscount.amount} {item.priceWithDiscount.currency}
-                            <button onClick={()=>props.deleteItem(item.id.id)}>Delete</button>
+                            Book: {item.book.name}, {item.book.priceWithDiscount.amount} {item.book.priceWithDiscount.currency}  Quantity: {item.quantity}
+                            {item.quantity < item.book.bookCount &&
+                            <button
+                                onClick={() => props.increaseQuantity(item.book.id.id)}
+                                className="btn btn-sm btn-success mx-2"
+                            >+</button>}
+                            <button
+                                onClick={() => props.decreaseQuantity(item.book.id.id)}
+                                className="btn btn-sm btn-warning mx-2"
+                            >-</button>
+                            <button onClick={()=>props.deleteItem(item.book.id.id)} className={"btn mx-1 btn-close "}></button>
 
                         </li>
-                    ); })}
+                    );}
+                else {
+                        return (
+                            <li>
+                               Book: {item.book.name}, {item.book.priceWithDiscount.amount}  {item.book.priceWithDiscount.currency} -> {item.book.priceWithDiscount.amount*61.5} MKD  Quantity: {item.quantity}
+                                {item.quantity < item.book.bookCount &&
+                                <button
+                                    onClick={() => props.increaseQuantity(item.book.id.id)}
+                                    className="btn btn-sm btn-success mx-2"
+                                >+</button>}
+
+                                <button
+                                    onClick={() => props.decreaseQuantity(item.book.id.id)}
+                                    className="btn btn-sm btn-warning mx-2"
+                                >-</button>
+
+                                <button onClick={()=>props.deleteItem(item.book.id.id)} className={"btn mx-1 btn-close "}></button>
+
+                            </li>
+                        );
+                    }})}
             </ul>
             <h4> Total price: {sum} MKD</h4>
             {sum > 0 && (

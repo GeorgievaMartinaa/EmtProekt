@@ -113,7 +113,7 @@ const BookForm = (props) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Categories</label>
+                        <label>Status</label>
                         <select name="status" id="status" className="form-control" onChange={handleChange}>
                             {props.status.map((term, index) => {
                                 return <option key={index} value={term}>{term}</option>

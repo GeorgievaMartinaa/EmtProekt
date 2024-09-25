@@ -13,5 +13,5 @@ public class BookOrderForm {
     private Book book;
 
     @Min(1)
-    private int quantity = 1;
+    private int quantity;
 }

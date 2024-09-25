@@ -47,7 +47,6 @@ public class Order extends AbstractEntity<OrderId> {
         return total;
     }
 
-    //ova Book e value object a ne knigata od drugiot ogranicen kontekst
     public BookOrder addBookInOrder(@NonNull Book book, int qty){
         Objects.requireNonNull(book,"book can't be null");
         var item =new BookOrder(book.getId(), book.getPrice(),qty);
@@ -55,12 +54,6 @@ public class Order extends AbstractEntity<OrderId> {
         bookOrderSet.add(item);
 
         return item;
-    }
-
-    public void removeBookFromOrder(@NonNull BookOrderId bookOrderId){
-        Objects.requireNonNull(bookOrderId,"book can't be null");
-
-        bookOrderSet.removeIf(b->b.getId().equals(bookOrderId));
     }
 }
 

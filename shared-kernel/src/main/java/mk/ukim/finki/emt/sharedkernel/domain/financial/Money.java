@@ -39,7 +39,10 @@ public class Money implements ValueObject {
 
     public Money add(Money money){
         if(!currency.equals(money.currency)){
-            throw new IllegalArgumentException("Cannot add Money objects with different currencies");
+           // throw new IllegalArgumentException("Cannot add Money objects with different currencies");
+            if(money.currency == Currency.EUR){
+                return new Money(currency,amount+(money.amount*61.5));
+            }
         }
         return new Money(currency,amount+money.amount);
     }

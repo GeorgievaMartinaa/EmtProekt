@@ -1,16 +1,11 @@
 package mk.ukim.finki.emt.bookordermanagement.xport.rest;
 
-import com.fasterxml.jackson.core.JsonParser;
 import lombok.AllArgsConstructor;
-import mk.ukim.finki.emt.bookordermanagement.domain.exeptions.OrderIdNotExistsExeption;
 import mk.ukim.finki.emt.bookordermanagement.domain.model.*;
-import mk.ukim.finki.emt.bookordermanagement.domain.valueObjects.Book;
 import mk.ukim.finki.emt.bookordermanagement.service.OrderService;
-import mk.ukim.finki.emt.bookordermanagement.service.forms.BookOrderForm;
 import mk.ukim.finki.emt.bookordermanagement.service.forms.OrderForm;
 import mk.ukim.finki.emt.sharedkernel.domain.financial.Currency;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,20 +32,5 @@ public class OrderResource {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
         }
-    }
-
-    @PostMapping("/deleteItem/{orderId}/{bookOrderId}")
-    public ResponseEntity deleteItemFromOrder(@PathVariable OrderId orderId,
-                                              @PathVariable BookOrderId bookOrderId) {
-
-        if (orderId == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if (bookOrderId == null)
-            return ResponseEntity.notFound().build();
-
-        this.orderService.deleteItem(orderId, bookOrderId);
-        return ResponseEntity.ok().build();
-
     }
 }

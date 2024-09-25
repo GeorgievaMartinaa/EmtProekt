@@ -26,9 +26,6 @@ const BookOrderService = {
         return axios.get(`/book/status`)
     },
 
-    getBook: (id) => {
-        return axios.get(`/book/${id}`)
-    },
 
     deleteBook: (id) => {
         return axios.post(`/book/delete/${id}`)
@@ -52,11 +49,7 @@ const BookOrderService = {
                 "category": category,
                 "bookCount": bookCount
             });
-    },
-
-    deleteOrderItem:(bookOrderId) =>{
-        return axios2.post(`/order/deleteItem/${bookOrderId}`)
-}
+    }
 
 
 }

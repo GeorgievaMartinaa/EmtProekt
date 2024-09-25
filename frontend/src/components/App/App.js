@@ -34,7 +34,7 @@ class App extends Component{
             <main>
                 <Routes>
                     <Route path={"/order"} exact element={
-                      <OrderForm orderForm={this.state.orderForm} onOrderSubmit={this.handleOrderSubmit} deleteItem={this.handleDeleteOrderItem}>
+                      <OrderForm orderForm={this.state.orderForm} onOrderSubmit={this.handleOrderSubmit} deleteItem={this.handleDeleteOrderItem} increaseQuantity={this.increaseQuantity} decreaseQuantity={this.decreaseQuantity}>
                       </OrderForm>
                     }>
                     </Route>
@@ -129,7 +129,8 @@ class App extends Component{
         this.loadCurrencies()
     }
 
-    handleBuyBook= (book)=>{
+    //da prebara dali e vekjedodadena taa kniga, ako e samo da se zgolemi kolicinata ako ne e da ja dodade
+    /*handleBuyBook= (book)=>{
       console.log(book)
         if(book.bookCount > 0){
         this.setState(prevState => ({
@@ -140,7 +141,45 @@ class App extends Component{
         }), () => {
             console.log(this.state.orderForm.items);
         })};
-  };
+  };*/
+    handleBuyBook = (book) => {
+        console.log(book);
+
+        if (book.bookCount > 0) {
+            this.setState(prevState => {
+                // Проверка дали книгата веќе е додадена
+                const existingItem = prevState.orderForm.items.find(item => item.book.id === book.id);
+
+                if (existingItem) {
+                    // Ако книгата веќе постои, зголеми ја количината
+                    const updatedItems = prevState.orderForm.items.map(item =>
+                        item.book.id === book.id
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                    );
+                    return {
+                        orderForm: {
+                            ...prevState.orderForm,
+                            items: updatedItems
+                        }
+                    };
+                } else {
+                    // Ако книгата не постои, додади ја со количина 1
+                    const newItem = { book: book, quantity: 1 };
+                    return {
+                        orderForm: {
+                            ...prevState.orderForm,
+                            items: [...prevState.orderForm.items, newItem]
+                        }
+                    };
+                }
+            }, () => {
+                console.log(this.state.orderForm.items);
+            });
+        }
+    };
+
+
 
     addBook = (name, description,price,currency,discount,status,category,bookCount) => {
         BookOrderService.addBook(name, description,price, currency,discount,status,category,bookCount)
@@ -159,7 +198,7 @@ class App extends Component{
     handleDeleteOrderItem = (bookOrderId) =>{
         const items = this.state.orderForm.items; // Ги земаш items од state
         console.log(items)
-        const filteredItems = items.filter(item => item.id.id !== bookOrderId); // Ги филтрираш книгите со различен bookOrderId
+        const filteredItems = items.filter(item => item.book.id.id !== bookOrderId); // Ги филтрираш книгите со различен bookOrderId
         console.log(filteredItems)
 
         this.setState({
@@ -170,6 +209,32 @@ class App extends Component{
         console.log(this.state.orderForm.items)
     }
 
+    increaseQuantity = (bookId) => {
+        this.setState(prevState => ({
+            orderForm: {
+                ...prevState.orderForm,
+                items: prevState.orderForm.items.map(item =>
+                    item.book.id.id === bookId
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                )
+            }
+        }));
+    };
+
+    decreaseQuantity = (bookId) => {
+        this.setState(prevState => ({
+            orderForm: {
+                ...prevState.orderForm,
+                items: prevState.orderForm.items.map(item =>
+                    item.book.id.id === bookId && item.quantity > 1
+                        ? { ...item, quantity: item.quantity - 1 }
+                        : item
+                )
+            }
+        }));
+    };
+
 
     handleOrderSubmit = () => {
         const orderForm  = this.state.orderForm;
@@ -177,16 +242,17 @@ class App extends Component{
 
         const items = orderForm.items.map((item) => ({
             book: {
-                id: item.id.id,
-                name: item.name,
-                description: item.description,
-                discount: item.discount,
-                price: item.price,
-                bookCount: item.bookCount,
-                status: item.status,
-                category: item.category,
+                id: item.book.id.id,
+                name: item.book.name,
+                description: item.book.description,
+                discount: item.book.discount,
+                price: item.book.price,
+                bookCount: item.book.bookCount,
+                status: item.book.status,
+                category: item.book.category,
             },
-            quantity: 1,
+            //da se zeme kolicinata od formata
+            quantity: item.quantity,
         }));
 
 
